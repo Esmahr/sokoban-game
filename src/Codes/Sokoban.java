@@ -16,12 +16,11 @@ public class Sokoban extends JFrame {
         add(startScreen);
 
         setTitle("Sokoban");
-        
-        setSize(800,
-                500);
-        
+        setSize(800, 500);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
+
+        setVisible(true);
     }
 
     public static void main(String[] args) {

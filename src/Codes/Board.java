@@ -23,6 +23,7 @@ public class Board extends JPanel {
     private Player soko;
     private int w = 0;
     private int h = 0;
+    private int currentLevel;
     
     private boolean isCompleted = false;
 
@@ -75,9 +76,11 @@ public class Board extends JPanel {
 
         addKeyListener(new TAdapter());
         setFocusable(true);
-
-        requestFocusInWindow();
         initWorld();
+    }
+
+    public void startGame() {
+        requestFocusInWindow();
     }
 
     public int getBoardWidth() {
@@ -482,26 +485,41 @@ public class Board extends JPanel {
         int nOfBags = baggs.size();
         int finishedBags = 0;
 
-        for (int i = 0; i < nOfBags; i++) {
-            
-            Baggage bag = baggs.get(i);
-            
-            for (int j = 0; j < nOfBags; j++) {
-                
-                Area area =  areas.get(j);
-                
+        for (Baggage bag : baggs) {
+            for (Area area : areas) {
                 if (bag.x() == area.x() && bag.y() == area.y()) {
-                    
-                    finishedBags += 1;
+                    finishedBags++;
                 }
             }
         }
 
         if (finishedBags == nOfBags) {
-            
             isCompleted = true;
-            repaint();
+            showCompletionScreen();
         }
+    }
+
+    private void showCompletionScreen() {
+        int option = JOptionPane.showOptionDialog(this,
+                "Tebrikler, kazandınız! Bir sonraki levele geçmek için 'Evet', ana sayfaya dönmek için 'Hayır'ı tıklayınız.",
+                "Seviye Tamamlandı",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.INFORMATION_MESSAGE,
+                null, null, null);
+
+        if (option == JOptionPane.YES_OPTION) {
+            // Sonraki seviyeye geç
+            loadNextLevel();
+        } else {
+            // Ana sayfaya dön
+            goBackToStartPage();
+        }
+    }
+
+    private void loadNextLevel() {
+        // Mevcut seviyeyi artır ve yeni seviyeyi yükle
+        currentLevel++;
+        restartLevel();
     }
 
     private void restartLevel() {

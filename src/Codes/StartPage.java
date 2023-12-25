@@ -88,17 +88,15 @@ public class StartPage extends JPanel {
     }
 
     private void loadLevel(int level) {
-        frame.getContentPane().removeAll();
+            frame.getContentPane().removeAll();
 
-        Board board = new Board(level);
-        // Burada, 'Board' sınıfı oyun durumunu kontrol edecek ve
-        // gerektiğinde önceki durumdan devam edecek şekilde ayarlanmalıdır.
+            Board board = new Board(level);
+            frame.add(board);
+            frame.setSize(BOARD_WIDTH, BOARD_HEIGHT);
+            frame.validate();
+            frame.repaint();
 
-        frame.add(board);
-        frame.setSize(BOARD_WIDTH, BOARD_HEIGHT);
-        frame.validate();
-        frame.repaint();
-
+            board.startGame(); // Board'a odaklanmayı talep et
 
     }
 }
