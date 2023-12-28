@@ -46,14 +46,28 @@ public class Board extends JPanel {
             + "  # ### ### ##   ######  $       #\n"
             + "  # #     #    #            ###  #\n"
             + "  ################################\n";
+    private String level1
+            = "#######################\n"
+            + "####*###############  ##\n"
+            + "##       #           $##\n"
+            + "## $    $#      ##### ##\n"
+            + "###  #   #    $   ### ##\n"
+            + "### ###  #  ######### ##\n"
+            + "##       #      #  ## ##\n"
+            + "##          $   #  ## ##\n"
+            + "###    $    #        ..#\n"
+            + "###   ##   ####      ..#\n"
+            + "#########@######    #..#\n"
+            + "########################\n";
 
-    public Board(int level) {
-        switch (level) {
+    public Board(int levelNum) {
+        currentLevel = levelNum;
+        switch (levelNum) {
             case 1:
-                level = level;
+                this.level = level1;
                 break;
             case 2:
-                level = level;
+                this.level = level;
                 break;
             default:
                 break;
@@ -433,7 +447,7 @@ public class Board extends JPanel {
 
                     Baggage bag = baggs.get(i);
 
-                    if (soko.isLeftCollision(bag) && soko1.isLeftCollision(bag)) {
+                    if (soko.isLeftCollision(bag)) {
 
                         for (int j = 0; j < baggs.size(); j++) {
                             
@@ -464,7 +478,7 @@ public class Board extends JPanel {
 
                     Baggage bag = baggs.get(i);
                     
-                    if (soko.isRightCollision(bag)&&soko1.isRightCollision(bag)) {
+                    if (soko.isRightCollision(bag)) {
                         
                         for (int j = 0; j < baggs.size(); j++) {
 
@@ -494,7 +508,7 @@ public class Board extends JPanel {
 
                     Baggage bag = baggs.get(i);
                     
-                    if (soko.isTopCollision(bag)&&soko1.isTopCollision(bag)) {
+                    if (soko.isTopCollision(bag)) {
                         
                         for (int j = 0; j < baggs.size(); j++) {
 
@@ -525,7 +539,7 @@ public class Board extends JPanel {
 
                     Baggage bag = baggs.get(i);
                     
-                    if (soko.isBottomCollision(bag)&&soko1.isBottomCollision(bag)) {
+                    if (soko.isBottomCollision(bag)) {
                         
                         for (int j = 0; j < baggs.size(); j++) {
 
@@ -586,19 +600,17 @@ public class Board extends JPanel {
                 null, null, null);
 
         if (option == JOptionPane.YES_OPTION) {
-            // Sonraki seviyeye geç
-            loadNextLevel();
+            loadNextLevel(); // Sonraki seviyeye geç
         } else {
-            // Ana sayfaya dön
-            goBackToStartPage();
+            goBackToStartPage(); // Ana sayfaya dön
         }
     }
 
     private void loadNextLevel() {
-        // Mevcut seviyeyi artır ve yeni seviyeyi yükle
-        currentLevel++;
-        restartLevel();
+        currentLevel++; // Mevcut seviyeyi artır
+        restartLevel(); // Yeni seviyeyi başlat
     }
+
 
     private void restartLevel() {
 
