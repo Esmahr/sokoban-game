@@ -6,7 +6,6 @@ import javax.swing.JFrame;
 public class Sokoban extends JFrame {
 
     public Sokoban() {
-
         initUI();
     }
 
@@ -16,17 +15,14 @@ public class Sokoban extends JFrame {
         add(startScreen);
 
         setTitle("Sokoban");
-        setSize(800, 500);
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
-
         setVisible(true);
     }
 
     public static void main(String[] args) {
-
         EventQueue.invokeLater(() -> {
-            
             Sokoban game = new Sokoban();
             game.setVisible(true);
         });

@@ -30,6 +30,59 @@ public class Board extends JPanel {
     private boolean isCompleted = false;
 
     private String level
+            = "##################\n"
+            + "######     #######\n"
+            + "###### ### #######\n"
+            + "#####   $  $    ##\n"
+            + "###   $     #   ##\n"
+            + "### ##  $   $   ##\n"
+            + "###    ## ##  ..##\n"
+            + "###   $  *    ..##\n"
+            + "#########@##  ..##\n"
+            + "##################\n"
+            + "##################\n";
+
+    private String level1
+            = "####################\n"
+            + "#########  #########\n"
+            + "######    $  #######\n"
+            + "##### $ #  $    ####\n"
+            + "###       ### ######\n"
+            + "######   *  $ ######\n"
+            + "###     #  #  ..####\n"
+            + "### $#  $     ..####\n"
+            + "###  ####@### ..####\n"
+            + "####################\n"
+            + "####################\n";
+
+    private String level2
+            = "######################\n"
+            + "####             #####\n"
+            + "###   ##$#     #   ###\n"
+            + "##         # $ #$  ###\n"
+            + "###  $  # ###    #####\n"
+            + "#####      #  ## #####\n"
+            + "##         #     # ..#\n"
+            + "##    $       *    ..#\n"
+            + "###$#### @###      ..#\n"
+            + "###      #############\n"
+            + "######################\n";
+
+    private String level3
+            = "########################\n"
+            + "####################  ##\n"
+            + "##       #   *       $##\n"
+            + "## $    $#      ##### ##\n"
+            + "###  #   #    $   ### ##\n"
+            + "### ###  #  ######### ##\n"
+            + "##       #      #  ## ##\n"
+            + "##          $   #  ## ##\n"
+            + "###    $    #        ..#\n"
+            + "###   ##   ####      ..#\n"
+            + "#########@######    #..#\n"
+            + "########################\n";
+
+    private String level4
             = "    ######                        \n"
             + "    #    #########################\n"
             + "    #    $             ####      #\n"
@@ -46,34 +99,31 @@ public class Board extends JPanel {
             + "  # ### ### ##   ######  $       #\n"
             + "  # #     #    #            ###  #\n"
             + "  ################################\n";
-    private String level1
-            = "#######################\n"
-            + "####*###############  ##\n"
-            + "##       #           $##\n"
-            + "## $    $#      ##### ##\n"
-            + "###  #   #    $   ### ##\n"
-            + "### ###  #  ######### ##\n"
-            + "##       #      #  ## ##\n"
-            + "##          $   #  ## ##\n"
-            + "###    $    #        ..#\n"
-            + "###   ##   ####      ..#\n"
-            + "#########@######    #..#\n"
-            + "########################\n";
 
     public Board(int levelNum) {
         currentLevel = levelNum;
         switch (levelNum) {
             case 1:
-                this.level = level1;
+                this.level = level;
                 break;
             case 2:
-                this.level = level;
+                this.level = level1;
+                break;
+            case 3:
+                this.level = level2;
+                break;
+            case 4:
+                this.level = level3;
+                break;
+            case 5:
+                this.level = level4;
                 break;
             default:
                 break;
         }
         initBoard();
-        JButton backButton = new JButton("Geri");
+        ImageIcon backButtonIcon = new ImageIcon("src/resources/previous.png"); // İkon dosyanızın yolu
+        JButton backButton = new JButton(backButtonIcon);
         backButton.addActionListener(e -> goBackToStartPage());
         add(backButton);
     }
@@ -137,6 +187,11 @@ public class Board extends JPanel {
                     break;
 
                 case '.':
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
                     a = new Area(x, y);
                     areas.add(a);
                     x += SPACE;

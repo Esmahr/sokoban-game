@@ -1,102 +1,153 @@
 package Codes;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.geom.RoundRectangle2D;
 
 public class StartPage extends JPanel {
 
+    private Image backgroundImage;
+    private JButton myButton;
+    private final int buttonOriginalWidth = 155;
+    private final int buttonOriginalHeight = 40;
+    private final int buttonGrowWidth = 165;
+    private final int buttonGrowHeight = 45;
+    private final Font originalFont = new Font("SansSerif", Font.BOLD, 15); // Orijinal font boyutu
+    private final Font enlargedFont = new Font("SansSerif", Font.BOLD, 17); // Büyütülmüş font boyutu
     private JFrame frame;
-    private static final Dimension BUTTON_SIZE = new Dimension(100, 50);
-    private static final Color BUTTON_COLOR = new Color(245, 6, 254);
-    private static final int BOARD_WIDTH = 800;
-    private static final int BOARD_HEIGHT = 500;
 
     public StartPage(JFrame frame) {
         this.frame = frame;
-        initUI();
-    }
-
-    private void initUI() {
-        setLayout(new BorderLayout());
-
-        JPanel topPanel = new JPanel();
-        topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.Y_AXIS));
-
-        topPanel.add(Box.createVerticalStrut(50));
-
-        JLabel welcomeLabel = new JLabel("Sokoban Oyununa Hoşgeldiniz!", JLabel.CENTER);
-        welcomeLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        welcomeLabel.setFont(new Font("Arial", Font.PLAIN, 28));
-        topPanel.add(welcomeLabel);
-
-        // Alt boşluk
-        topPanel.add(Box.createVerticalStrut(20)); // 20 piksel yükseklikte dikey boşluk
-        add(topPanel, BorderLayout.NORTH); // Üst paneli BorderLayout'un kuzey bölümüne ekle
-
-        // Butonlar için alt panel
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10)); // Butonların arasında 10 piksel boşluk
-
-        topPanel.add(Box.createVerticalStrut(50));
-
-        for (int i = 1; i <= 5; i++) {
-            JButton button = createLevelButton("Level " + i, i);
-            buttonPanel.add(button);
+        try {
+            backgroundImage = new ImageIcon("src/resources/welcome.png").getImage();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        add(buttonPanel, BorderLayout.CENTER); // Buton panelini BorderLayout'un orta bölümüne ekle
 
+        initializeButton();
+        setLayout(null);
     }
 
-    private JButton createLevelButton(String text, int level) {
-        JButton button = new JButton(text) {
+    private void initializeButton() {
+        myButton = new JButton("Oyuna Başla") {
             @Override
             protected void paintComponent(Graphics g) {
-                Graphics2D g2 = (Graphics2D) g.create();
-                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                Graphics2D g2d = (Graphics2D) g.create();
+                g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-                Color shadow = new Color(199, 47, 248);
-                g2.setColor(shadow);
-                g2.fillRoundRect(0, 0, getWidth(), getHeight(), 30, 30);
+                Color color2 = new Color(2, 54, 125);
+                Color color1 = new Color(41, 125, 224);
+                float[] fractions = {0.0f, 1.0f};
+                Color[] colors = {color1, color2};
 
-                g2.setColor(getBackground());
-                g2.fillRoundRect(0, 0, getWidth() - 5, getHeight() - 5, 30, 30);
+                LinearGradientPaint paint = new LinearGradientPaint(
+                        new Point(0, 0),
+                        new Point(0, getHeight()),
+                        fractions,
+                        colors
+                );
 
-                super.paintComponent(g2);
-                g2.dispose();
-            }
+                myButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        openLevelsPage();
+                    }
+                });
 
-            @Override
-            protected void paintBorder(Graphics g) {
-                // Border'ı iptal etmek için bu metod boş bırakıldı.
+                g2d.setPaint(paint);
+                g2d.fill(new RoundRectangle2D.Float(0, 0, getWidth(), getHeight(),
+                        ((RoundedBorder) getBorder()).getArcWidth(),
+                        ((RoundedBorder) getBorder()).getArcHeight()));
+
+                g2d.dispose();
+                super.paintComponent(g);
             }
         };
 
-        styleButton(button);
-        button.addActionListener(e -> loadLevel(level));
+        myButton.setForeground(Color.WHITE);
+        myButton.setBorder((Border) new RoundedBorder(30)); // 10 piksel yuvarlaklık
+        myButton.setOpaque(false);
+        myButton.setContentAreaFilled(false);
+        myButton.setFocusPainted(false);
+        myButton.setPreferredSize(new Dimension(buttonOriginalWidth, buttonOriginalHeight));
+        myButton.setBounds(750, 495, buttonOriginalWidth, buttonOriginalHeight);
+        myButton.setFont(new Font("SansSerif", Font.BOLD, 15));
 
-        return button;
+        myButton.addMouseListener(new MouseAdapter() {
+            public void mouseEntered(MouseEvent evt) {
+                myButton.setFont(enlargedFont);
+                int newX = myButton.getX() - (buttonGrowWidth - buttonOriginalWidth) / 2;
+                int newY = myButton.getY() - (buttonGrowHeight - buttonOriginalHeight) / 2;
+                myButton.setBounds(newX, newY, buttonGrowWidth, buttonGrowHeight);
+            }
+
+            public void mouseExited(MouseEvent evt) {
+                myButton.setFont(originalFont); // Fontu orijinal boyutuna geri döndür
+                int newX = myButton.getX() + (buttonGrowWidth - buttonOriginalWidth) / 2;
+                int newY = myButton.getY() + (buttonGrowHeight - buttonOriginalHeight) / 2;
+                myButton.setBounds(newX, newY, buttonOriginalWidth, buttonOriginalHeight);
+            }
+        });
+        add(myButton);
     }
 
-    private void styleButton(JButton button) {
-        button.setPreferredSize(BUTTON_SIZE);
-        button.setFont(new Font("Arial", Font.BOLD, 16));
-        button.setFocusPainted(false);
-        button.setBorderPainted(false);
-        button.setContentAreaFilled(false);
-        button.setOpaque(false);
-        button.setBackground(BUTTON_COLOR);
-        button.setBorder(BorderFactory.createEmptyBorder());
+    private void openLevelsPage() {
+        // Levels sayfasını açacak kodlar burada.
+        Levels levelsPanel = new Levels(frame); // Levels sınıfından bir örnek oluşturun
+        frame.setContentPane(levelsPanel); // Ana frame'in içeriğini Levels paneli ile değiştirin
+        frame.revalidate(); // Frame içeriğindeki değişiklikleri uygula
+        frame.repaint();  // Frame'i yeniden çiz
     }
 
-    private void loadLevel(int level) {
-            frame.getContentPane().removeAll();
+    static class LevelsPage extends JPanel {
+        public LevelsPage() {
+            // Levels sayfasının içeriğini burada oluşturun
+            setBackground(Color.BLUE); // Örnek arkaplan rengi
+            add(new JLabel("Levels Page")); // Örnek label
+        }
+    }
 
-            Board board = new Board(level);
-            frame.add(board);
-            frame.setSize(BOARD_WIDTH, BOARD_HEIGHT);
-            frame.validate();
-            frame.repaint();
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        if (backgroundImage != null) {
+            g.drawImage(backgroundImage, 0, 0, this.getWidth(), this.getHeight(), this);
+        }
+    }
 
-            board.startGame(); // Board'a odaklanmayı talep et
+    class RoundedBorder implements Border {
+        private final int arcWidth;
+        private final int arcHeight;
 
+        public RoundedBorder(int radius) {
+            this.arcWidth = radius;
+            this.arcHeight = radius;
+        }
+
+        @Override
+        public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {
+            // Burada border çizgisi çizilmiyor, bu yüzden boş bırakıldı.
+        }
+
+        public Insets getBorderInsets(Component c) {
+            return new Insets(this.arcHeight, this.arcWidth, this.arcHeight, this.arcWidth);
+        }
+
+        public boolean isBorderOpaque() {
+            return false;
+        }
+
+        public int getArcWidth() {
+            return arcWidth;
+        }
+
+        public int getArcHeight() {
+            return arcHeight;
+        }
     }
 }
