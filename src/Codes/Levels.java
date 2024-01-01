@@ -3,6 +3,8 @@ package Codes;
 import javax.swing.*;
 import javax.swing.plaf.basic.BasicButtonUI;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 
@@ -67,8 +69,25 @@ public class Levels extends JPanel {
         JButton button = new JButton(text);
         styleButton(button);
         button.addActionListener(e -> loadLevel(level));
+
+        // MouseListener ile görsel efektleri uygula
+        button.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                button.setForeground(Color.YELLOW); // Font rengini değiştir
+                button.setFont(new Font("Arial", Font.BOLD, 16)); // Font stilini kalın yap
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                button.setForeground(Color.BLACK); // Orijinal font rengine dön
+                button.setFont(new Font("Arial", Font.PLAIN, 16)); // Orijinal font stilini uygula
+            }
+        });
+
         return button;
     }
+
 
     private void styleButton(JButton button) {
         button.setPreferredSize(BUTTON_SIZE);

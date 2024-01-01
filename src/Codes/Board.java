@@ -139,11 +139,12 @@ public class Board extends JPanel {
                 break;
         }
         initBoard();
-        ImageIcon backButtonIcon = new ImageIcon("src/resources/previous.png"); // İkon dosyanızın yolu
-        JButton backButton = new JButton(backButtonIcon);
-        backButton.addActionListener(e -> goBackToStartPage());
-        add(backButton);
     }
+    private void loadImage() {
+        ImageIcon ii = new ImageIcon("src/resources/background.png"); // Resmin yolu
+        backgroundImage = ii.getImage();
+    }
+
 
     private void goBackToStartPage() {
         JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
@@ -157,6 +158,21 @@ public class Board extends JPanel {
         addKeyListener(new TAdapter());
         setFocusable(true);
         initWorld();
+        loadImage();
+        ImageIcon backButtonIcon = new ImageIcon("src/resources/previous.png");
+        JButton backButton = new JButton(backButtonIcon);
+
+        // Buton özelliklerini ayarla
+        backButton.setBorderPainted(false); // Kenarlık çizimini kapat
+        backButton.setContentAreaFilled(false); // İçerik alanı arka planını kapat
+        backButton.setFocusPainted(false); // Focus çizimini kapat
+        backButton.setOpaque(false); // Şeffaflığı etkinleştir
+
+        // Eylem dinleyicisi ekle
+        backButton.addActionListener(e -> goBackToStartPage());
+
+        // Butonu panele ekle
+        add(backButton);
     }
 
     public void startGame() {
@@ -247,9 +263,6 @@ public class Board extends JPanel {
 
     private void buildWorld(Graphics g) {
 
-        g.setColor(new Color(250, 240, 170));
-        g.fillRect(0, 0, this.getWidth(), this.getHeight());
-
         ArrayList<Actor> world = new ArrayList<>();
 
         world.addAll(walls);
@@ -282,6 +295,8 @@ public class Board extends JPanel {
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
+        g.drawImage(backgroundImage, 0, 0, this.getWidth(), this.getHeight(), this);
+
         buildWorld(g);
     }
 
