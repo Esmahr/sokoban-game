@@ -22,6 +22,8 @@ public class StartPage extends JPanel {
     private JFrame frame;
 
     public StartPage(JFrame frame) {
+        Music music = new Music();
+        music.playMusic("resources/Joker-ft.-İnfaz-2DK-official-audio.wav");
         this.frame = frame;
         try {
             backgroundImage = new ImageIcon("src/resources/welcome1.png").getImage();
