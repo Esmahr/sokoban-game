@@ -1,7 +1,6 @@
 package Codes;
 
-import java.awt.Color;
-import java.awt.Graphics;
+import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
@@ -16,44 +15,62 @@ public class Board extends JPanel {
     private final int TOP_COLLISION = 3;
     private final int BOTTOM_COLLISION = 4;
 
+    private Image backgroundImage;
+
     private ArrayList<Wall> walls;
     private ArrayList<Baggage> baggs;
     private ArrayList<Area> areas;
-    
+
     private Player soko;
     private Player soko1;
 
     private int w = 0;
     private int h = 0;
     private int currentLevel;
-    
+
     private boolean isCompleted = false;
+     boolean isLevel1Button = true;
+     boolean isLevel2Button = false;
+     boolean isLevel3Button = false;
+     boolean isLevel4Button = false;
+     boolean isLevel5Button = false;
+
 
     private String level
-            = "##################\n"
-            + "######     #######\n"
-            + "###### ### #######\n"
-            + "#####   $  $    ##\n"
-            + "###   $     #   ##\n"
-            + "### ##  $   $   ##\n"
-            + "###    ## ##  ..##\n"
-            + "###   $  *    ..##\n"
-            + "#########@##  ..##\n"
-            + "##################\n"
-            + "##################\n";
+            = "###################################\n"
+            + "######                      #######\n"
+            + "######     #############    #######\n"
+            + "#####  $              $          ##\n"
+            + "###                              ##\n"
+            + "###        $       #             ##\n"
+            + "###        ####                  ##\n"
+            + "###     ##      $       $        ##\n"
+            + "###                              ##\n"
+            + "###                              ##\n"
+            + "###         ###     ####         ##\n"
+            + "###                              ##\n"
+            + "###                              ##\n"
+            + "###     #######      #####       ##\n"
+            + "###     $     *                ..##\n"
+            + "###                            ..##\n"
+            + "#########@#####################..##\n"
+            + "###################################\n";
 
     private String level1
-            = "####################\n"
-            + "#########  #########\n"
-            + "######    $  #######\n"
-            + "##### $ #  $    ####\n"
-            + "###       ### ######\n"
-            + "######   *  $ ######\n"
-            + "###     #  #  ..####\n"
-            + "### $#  $     ..####\n"
-            + "###  ####@### ..####\n"
-            + "####################\n"
-            + "####################\n";
+            = "###################################\n"
+            + "################  #################\n"
+            + "########         $     ############\n"
+            + "######                 ############\n"
+            + "#####   $   ####  $            ####\n"
+            + "###    ###########   ###     ######\n"
+            + "###                    #### #######\n"
+            + "######     *               $ ######\n"
+            + "########                     ######\n"
+            + "###         #     #          ..####\n"
+            + "###    $###3       $          ..####\n"
+            + "###         ######  ####@### ..####\n"
+            + "###################################\n"
+            + "###################################\n";
 
     private String level2
             = "######################\n"
@@ -151,8 +168,27 @@ public class Board extends JPanel {
         baggs = new ArrayList<>();
         areas = new ArrayList<>();
 
-        int x = OFFSET;
-        int y = OFFSET;
+        int levelWidth = 1;
+        int maxWidth = 1;
+        int levelHeight = 1;
+
+        for (int i = 0; i < level.length(); i++) {
+            if (level.charAt(i) == '\n') {
+                levelHeight++;
+                if (maxWidth < levelWidth) {
+                    maxWidth = levelWidth;
+                }
+                levelWidth = 0;
+            } else {
+                levelWidth++;
+            }
+        }
+
+        int xStart = 420;
+        int yStart = 200;
+
+        int x = xStart;
+        int y = yStart;
 
         Wall wall;
         Baggage b;
@@ -166,12 +202,7 @@ public class Board extends JPanel {
 
                 case '\n':
                     y += SPACE;
-
-                    if (this.w < x) {
-                        this.w = x;
-                    }
-
-                    x = OFFSET;
+                    x = xStart;
                     break;
 
                 case '#':
@@ -187,11 +218,6 @@ public class Board extends JPanel {
                     break;
 
                 case '.':
-                    try {
-                        Thread.sleep(100);
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
-                    }
                     a = new Area(x, y);
                     areas.add(a);
                     x += SPACE;
@@ -214,9 +240,9 @@ public class Board extends JPanel {
                 default:
                     break;
             }
-
-            h = y;
         }
+
+        h = y;
     }
 
     private void buildWorld(Graphics g) {
@@ -237,15 +263,15 @@ public class Board extends JPanel {
             Actor item = world.get(i);
 
             if (item instanceof Player || item instanceof Baggage) {
-                
+
                 g.drawImage(item.getImage(), item.x() + 2, item.y() + 2, this);
             } else {
-                
+
                 g.drawImage(item.getImage(), item.x(), item.y(), this);
             }
 
             if (isCompleted) {
-                
+
                 g.setColor(new Color(0, 0, 0));
                 g.drawString("Completed", 25, 20);
             }
@@ -256,7 +282,6 @@ public class Board extends JPanel {
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-
         buildWorld(g);
     }
 
@@ -272,26 +297,26 @@ public class Board extends JPanel {
             int key = e.getKeyCode();
 
             switch (key) {
-                
+
                 case KeyEvent.VK_LEFT:
-                    
+
                     if (checkWallCollision(soko,
-                            LEFT_COLLISION)|| checkPlayerCollision(soko, LEFT_COLLISION)) {
+                            LEFT_COLLISION) || checkPlayerCollision(soko, LEFT_COLLISION)) {
                         return;
                     }
-                    
+
                     if (checkBagCollision(LEFT_COLLISION)) {
                         return;
                     }
-                    
+
                     soko.move(-SPACE, 0);
-                    
+
                     break;
 
                 case KeyEvent.VK_A:
 
                     if (checkWallCollision(soko1,
-                            LEFT_COLLISION)|| checkPlayerCollision(soko1, LEFT_COLLISION)) {
+                            LEFT_COLLISION) || checkPlayerCollision(soko1, LEFT_COLLISION)) {
                         return;
                     }
 
@@ -302,24 +327,24 @@ public class Board extends JPanel {
                     soko1.move(-SPACE, 0);
 
                     break;
-                    
+
                 case KeyEvent.VK_RIGHT:
-                    
-                    if (checkWallCollision(soko, RIGHT_COLLISION)|| checkPlayerCollision(soko, RIGHT_COLLISION)) {
+
+                    if (checkWallCollision(soko, RIGHT_COLLISION) || checkPlayerCollision(soko, RIGHT_COLLISION)) {
                         return;
                     }
-                    
+
                     if (checkBagCollision(RIGHT_COLLISION)) {
                         return;
                     }
-                    
+
                     soko.move(SPACE, 0);
-                    
+
                     break;
 
                 case KeyEvent.VK_D:
 
-                    if (checkWallCollision(soko1, RIGHT_COLLISION)|| checkPlayerCollision(soko1, RIGHT_COLLISION)) {
+                    if (checkWallCollision(soko1, RIGHT_COLLISION) || checkPlayerCollision(soko1, RIGHT_COLLISION)) {
                         return;
                     }
 
@@ -330,24 +355,24 @@ public class Board extends JPanel {
                     soko1.move(SPACE, 0);
 
                     break;
-                    
+
                 case KeyEvent.VK_UP:
-                    
-                    if (checkWallCollision(soko, TOP_COLLISION)|| checkPlayerCollision(soko, TOP_COLLISION)) {
+
+                    if (checkWallCollision(soko, TOP_COLLISION) || checkPlayerCollision(soko, TOP_COLLISION)) {
                         return;
                     }
-                    
+
                     if (checkBagCollision(TOP_COLLISION)) {
                         return;
                     }
-                    
+
                     soko.move(0, -SPACE);
-                    
+
                     break;
 
                 case KeyEvent.VK_W:
 
-                    if (checkWallCollision(soko1, TOP_COLLISION)|| checkPlayerCollision(soko1, TOP_COLLISION)) {
+                    if (checkWallCollision(soko1, TOP_COLLISION) || checkPlayerCollision(soko1, TOP_COLLISION)) {
                         return;
                     }
 
@@ -358,23 +383,23 @@ public class Board extends JPanel {
                     soko1.move(0, -SPACE);
 
                     break;
-                    
+
                 case KeyEvent.VK_DOWN:
-                    
-                    if (checkWallCollision(soko, BOTTOM_COLLISION)|| checkPlayerCollision(soko, BOTTOM_COLLISION)) {
+
+                    if (checkWallCollision(soko, BOTTOM_COLLISION) || checkPlayerCollision(soko, BOTTOM_COLLISION)) {
                         return;
                     }
-                    
+
                     if (checkBagCollision(BOTTOM_COLLISION)) {
                         return;
                     }
-                    
+
                     soko.move(0, SPACE);
-                    
+
                     break;
                 case KeyEvent.VK_S:
 
-                    if (checkWallCollision(soko1, BOTTOM_COLLISION)|| checkPlayerCollision(soko, BOTTOM_COLLISION)) {
+                    if (checkWallCollision(soko1, BOTTOM_COLLISION) || checkPlayerCollision(soko, BOTTOM_COLLISION)) {
                         return;
                     }
 
@@ -385,13 +410,13 @@ public class Board extends JPanel {
                     soko1.move(0, SPACE);
 
                     break;
-                    
+
                 case KeyEvent.VK_R:
-                    
+
                     restartLevel();
-                    
+
                     break;
-                    
+
                 default:
                     break;
             }
@@ -403,88 +428,88 @@ public class Board extends JPanel {
     private boolean checkWallCollision(Actor actor, int type) {
 
         switch (type) {
-            
+
             case LEFT_COLLISION:
-                
+
                 for (int i = 0; i < walls.size(); i++) {
-                    
+
                     Wall wall = walls.get(i);
-                    
+
                     if (actor.isLeftCollision(wall)) {
-                        
+
                         return true;
                     }
                 }
-                
+
                 return false;
-                
+
             case RIGHT_COLLISION:
-                
+
                 for (int i = 0; i < walls.size(); i++) {
-                    
+
                     Wall wall = walls.get(i);
-                    
+
                     if (actor.isRightCollision(wall)) {
                         return true;
                     }
                 }
-                
+
                 return false;
-                
+
             case TOP_COLLISION:
-                
+
                 for (int i = 0; i < walls.size(); i++) {
-                    
+
                     Wall wall = walls.get(i);
-                    
+
                     if (actor.isTopCollision(wall)) {
-                        
+
                         return true;
                     }
                 }
-                
+
                 return false;
-                
+
             case BOTTOM_COLLISION:
-                
+
                 for (int i = 0; i < walls.size(); i++) {
-                    
+
                     Wall wall = walls.get(i);
-                    
+
                     if (actor.isBottomCollision(wall)) {
-                        
+
                         return true;
                     }
                 }
-                
+
                 return false;
-                
+
             default:
                 break;
         }
-        
+
         return false;
     }
 
     private boolean checkPlayerCollision(Player player, int type) {
         switch (type) {
             case LEFT_COLLISION:
-                if (player.isLeftCollision(soko1)|| player.isLeftCollision(soko)) {
+                if (player.isLeftCollision(soko1) || player.isLeftCollision(soko)) {
                     return true;
                 }
                 break;
             case RIGHT_COLLISION:
-                if (player.isRightCollision(soko1)|| player.isLeftCollision(soko)) {
+                if (player.isRightCollision(soko1) || player.isLeftCollision(soko)) {
                     return true;
                 }
                 break;
             case TOP_COLLISION:
-                if (player.isTopCollision(soko1)|| player.isLeftCollision(soko)) {
+                if (player.isTopCollision(soko1) || player.isLeftCollision(soko)) {
                     return true;
                 }
                 break;
             case BOTTOM_COLLISION:
-                if (player.isBottomCollision(soko1)|| player.isLeftCollision(soko)) {
+                if (player.isBottomCollision(soko1) || player.isLeftCollision(soko)) {
                     return true;
                 }
                 break;
@@ -495,9 +520,9 @@ public class Board extends JPanel {
     private boolean checkBagCollision(int type) {
 
         switch (type) {
-            
+
             case LEFT_COLLISION:
-                
+
                 for (int i = 0; i < baggs.size(); i++) {
 
                     Baggage bag = baggs.get(i);
@@ -505,121 +530,121 @@ public class Board extends JPanel {
                     if (soko.isLeftCollision(bag)) {
 
                         for (int j = 0; j < baggs.size(); j++) {
-                            
+
                             Baggage item = baggs.get(j);
-                            
+
                             if (!bag.equals(item)) {
-                                
+
                                 if (bag.isLeftCollision(item)) {
                                     return true;
                                 }
                             }
-                            
+
                             if (checkWallCollision(bag, LEFT_COLLISION)) {
                                 return true;
                             }
                         }
-                        
+
                         bag.move(-SPACE, 0);
                         isCompleted();
                     }
                 }
-                
+
                 return false;
-                
+
             case RIGHT_COLLISION:
-                
+
                 for (int i = 0; i < baggs.size(); i++) {
 
                     Baggage bag = baggs.get(i);
-                    
+
                     if (soko.isRightCollision(bag)) {
-                        
+
                         for (int j = 0; j < baggs.size(); j++) {
 
                             Baggage item = baggs.get(j);
-                            
+
                             if (!bag.equals(item)) {
-                                
+
                                 if (bag.isRightCollision(item)) {
                                     return true;
                                 }
                             }
-                            
+
                             if (checkWallCollision(bag, RIGHT_COLLISION)) {
                                 return true;
                             }
                         }
-                        
+
                         bag.move(SPACE, 0);
                         isCompleted();
                     }
                 }
                 return false;
-                
+
             case TOP_COLLISION:
-                
+
                 for (int i = 0; i < baggs.size(); i++) {
 
                     Baggage bag = baggs.get(i);
-                    
+
                     if (soko.isTopCollision(bag)) {
-                        
+
                         for (int j = 0; j < baggs.size(); j++) {
 
                             Baggage item = baggs.get(j);
 
                             if (!bag.equals(item)) {
-                                
+
                                 if (bag.isTopCollision(item)) {
                                     return true;
                                 }
                             }
-                            
+
                             if (checkWallCollision(bag, TOP_COLLISION)) {
                                 return true;
                             }
                         }
-                        
+
                         bag.move(0, -SPACE);
                         isCompleted();
                     }
                 }
 
                 return false;
-                
+
             case BOTTOM_COLLISION:
-                
+
                 for (int i = 0; i < baggs.size(); i++) {
 
                     Baggage bag = baggs.get(i);
-                    
+
                     if (soko.isBottomCollision(bag)) {
-                        
+
                         for (int j = 0; j < baggs.size(); j++) {
 
                             Baggage item = baggs.get(j);
-                            
+
                             if (!bag.equals(item)) {
-                                
+
                                 if (bag.isBottomCollision(item)) {
                                     return true;
                                 }
                             }
-                            
-                            if (checkWallCollision(bag,BOTTOM_COLLISION)) {
-                                
+
+                            if (checkWallCollision(bag, BOTTOM_COLLISION)) {
+
                                 return true;
                             }
                         }
-                        
+
                         bag.move(0, SPACE);
                         isCompleted();
                     }
                 }
-                
+
                 break;
-                
+
             default:
                 break;
         }
@@ -662,7 +687,31 @@ public class Board extends JPanel {
     }
 
     private void loadNextLevel() {
-        currentLevel++; // Mevcut seviyeyi artır
+        // Mevcut seviyeyi artır
+        currentLevel++;
+        switch (currentLevel) {
+            case 1:
+                this.level = level;
+                break;
+            case 2:
+                this.level = level1;
+                isLevel2Button = true;
+                break;
+            case 3:
+                this.level = level2;
+                isLevel3Button = true;
+                break;
+            case 4:
+                this.level = level3;
+                isLevel4Button = true;
+                break;
+            case 5:
+                this.level = level4;
+                isLevel5Button = true;
+                break;
+            default:
+                break;
+        }
         restartLevel(); // Yeni seviyeyi başlat
     }
 

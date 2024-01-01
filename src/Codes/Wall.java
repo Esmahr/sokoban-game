@@ -17,6 +17,8 @@ public class Wall extends Actor {
         
         ImageIcon iicon = new ImageIcon("src/resources/wall.png");
         image = iicon.getImage();
-        setImage(image);
+        Image newimg = image.getScaledInstance(20, 20,  java.awt.Image.SCALE_SMOOTH);
+        iicon = new ImageIcon(newimg);
+        setImage(iicon.getImage());
     }
 }

@@ -24,7 +24,7 @@ public class StartPage extends JPanel {
     public StartPage(JFrame frame) {
         this.frame = frame;
         try {
-            backgroundImage = new ImageIcon("src/resources/welcome.png").getImage();
+            backgroundImage = new ImageIcon("src/resources/welcome1.png").getImage();
         } catch (Exception e) {
             e.printStackTrace();
         }
