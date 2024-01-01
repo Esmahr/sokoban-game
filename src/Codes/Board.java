@@ -29,11 +29,11 @@ public class Board extends JPanel {
     private int currentLevel;
 
     private boolean isCompleted = false;
-     boolean isLevel1Button = true;
-     boolean isLevel2Button = false;
-     boolean isLevel3Button = false;
-     boolean isLevel4Button = false;
-     boolean isLevel5Button = false;
+    public static boolean isLevel1Button = true;
+    public static boolean isLevel2Button = false;
+    public static boolean isLevel3Button = false;
+    public static boolean isLevel4Button = false;
+    public static boolean isLevel5Button = false;
 
 
     private String level

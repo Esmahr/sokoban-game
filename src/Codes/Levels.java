@@ -143,7 +143,10 @@ public class Levels extends JPanel {
             frame.repaint();
             board.startGame();
         } else {
-            // Oyuncu bu seviyeye erişim iznine sahip değilse, bir mesaj gösterebilirsiniz.
+            JOptionPane.showMessageDialog(frame, "Kilitli!!");
+            initUI();
+            frame.validate();
+            frame.repaint();
         }
 
     }
