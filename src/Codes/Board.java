@@ -19,6 +19,8 @@ public class Board extends JPanel {
 
     private Image backgroundImage;
 
+    private Music music = new Music();
+
     private ArrayList<Wall> walls;
     private ArrayList<Baggage> baggs;
     private ArrayList<Area> areas;
@@ -42,16 +44,15 @@ public class Board extends JPanel {
             + "######                      #######\n"
             + "######     #### ######## $  #######\n"
             + "#####       $   #                ##\n"
-            + "###        ####### ###           ##\n"
-            + "###            #   #             ##\n"
-            + "###        ####    ####          ##\n"
-            + "###     ####   $      ####       ##\n"
+            + "###        #####   ###           ##\n"
             + "###                              ##\n"
-            + "###       #            #         ##\n"
+            + "###       #        ####          ##\n"
+            + "###     #####  $     #####       ##\n"
+            + "###                              ##\n"
             + "###       #####     ####         ##\n"
-            + "###   $                 $        ##\n"
+            + "###   $     #        #           ##\n"
             + "###                     $        ##\n"
-            + "###     #######      #####       ##\n"
+            + "###     #######     ######       ##\n"
             + "###     $                      ..##\n"
             + "###                            ..##\n"
             + "#########@#####################..##\n"
@@ -66,57 +67,60 @@ public class Board extends JPanel {
             + "###    ###########   ###     ######\n"
             + "###                    #### #######\n"
             + "######                     $ ######\n"
-            + "########                     ######\n"
-            + "###         #     #          ..####\n"
+            + "########                    #######\n"
+            + "###         #     #         #..####\n"
             + "###    $###       $          ..####\n"
-            + "###         ######  ####@### ..####\n"
-            + "###################################\n"
+            + "###         ######  ### @ ## ..####\n"
+            + "######################## ##########\n"
             + "###################################\n";
 
     private String level2
-            = "######################\n"
-            + "####             #####\n"
-            + "###   ##$#     #   ###\n"
-            + "##         # $ #$  ###\n"
-            + "###  $  # ###    #####\n"
-            + "#####      #  ## #####\n"
-            + "##         #     # ..#\n"
-            + "##    $            ..#\n"
-            + "###$#### @###      ..#\n"
-            + "###      #############\n"
-            + "######################\n";
+            = "##################################\n"
+            + "####             #################\n"
+            + "####                         #####\n"
+            + "###      ##$#          #       ###\n"
+            + "##           # $       #$      ###\n"
+            + "###   $  # ###     ####      #####\n"
+            + "####                         #####\n"
+            + "#####      #  ##  ##         #####\n"
+            + "##         #                 #####\n"
+            + "##                           # ..#\n"
+            + "##    $                        ..#\n"
+            + "#############$#### @ ##        ..#\n"
+            + "###                  #############\n"
+            + "##################################\n";
 
     private String level3
-            = "########################\n"
-            + "####################  ##\n"
-            + "##       #           $##\n"
-            + "## $    $#      ##### ##\n"
-            + "###  #   #    $   ### ##\n"
-            + "### ###  #  ######### ##\n"
-            + "##       #      #  ## ##\n"
-            + "##          $   #  ## ##\n"
-            + "###    $    #        ..#\n"
-            + "###   ##   ####      ..#\n"
-            + "#########@######    #..#\n"
-            + "########################\n";
+            = "##################################\n"
+            + "##############################  ##\n"
+            + "##          #                  $##\n"
+            + "## $       $#      #####   #### ##\n"
+            + "###   #     #    $              ##\n"
+            + "###  ###    #  #########   #### ##\n"
+            + "##          #      #  ##   #### ##\n"
+            + "##             $   #  ##   #### ##\n"
+            + "###    $         #             ..#\n"
+            + "###   ##        ### @          ..#\n"
+            + "##################   #####    #..#\n"
+            + "##################################\n";
 
     private String level4
-            = "    ######                        \n"
-            + "    #    #########################\n"
-            + "    #    $             ####      #\n"
-            + "   ##$    ##   ###        #      #\n"
-            + "  ##   #   ##       #####  $    ##\n"
-            + "  ##   #   ###$     $      ###   #\n"
-            + " ##    $    ##   ######      #   #\n"
+            = "##################################\n"
+            + "#####    #########################\n"
+            + "#####    $             ####      #\n"
+            + "#####$    ##   ###        #      #\n"
+            + "####   #   ##       #####  $    ##\n"
+            + "####   #   ###$     $      ###   #\n"
+            + "###    $    ##   ######      #   #\n"
             + "##  ## # ## ######  ..# $    #   #\n"
             + "#   #  #  #   ####  ..#  ### # ###\n"
             + "#                   ..#  #   #   #\n"
             + "# $ ### ###         ..#  $   #   #\n"
-            + "##  # # # #   #@##  ..#      #   #\n"
-            + " ## $       ######  ..########$  #\n"
-            + "  # ### ### ##   ######  $       #\n"
-            + "  # #     #    #            ###  #\n"
-            + "  ################################\n";
+            + "##  # # # #    @ #  ..#      #   #\n"
+            + "### $       ### ##  ..########$  #\n"
+            + "### ### ### ##   ######  $       #\n"
+            + "### #     #    #            ###  #\n"
+            + "##################################\n";
 
     public Board(int levelNum) {
         currentLevel = levelNum;
@@ -177,17 +181,6 @@ public class Board extends JPanel {
         backButton.addActionListener(e -> goBackToLevels());
 
         add(backButton);
-
-        // Ana Sayfa Butonu
-        ImageIcon homeButtonIcon = new ImageIcon("src/resources/2.png"); // Ana Sayfa ikonunun yolu
-        JButton homeButton = new JButton(homeButtonIcon);
-        homeButton.setBorderPainted(false);
-        homeButton.setContentAreaFilled(false);
-        homeButton.setFocusPainted(false);
-        homeButton.setOpaque(false);
-        homeButton.setBounds(1280, 50, 85, 55); // Ana Sayfa Butonunun konumu ve boyutu
-        homeButton.addActionListener(e -> goBackToStartPage()); // Ana sayfaya dönme işlemi
-        add(homeButton);
     }
 
     public void startGame() {
@@ -327,6 +320,7 @@ public class Board extends JPanel {
                     }
 
                     soko.move(-SPACE, 0);
+                    music.playSoundEffect("resources/adım.wav");
 
                     break;
 
@@ -341,6 +335,7 @@ public class Board extends JPanel {
                     }
 
                     soko.move(SPACE, 0);
+                    music.playSoundEffect("resources/adım.wav");
 
                     break;
 
@@ -355,6 +350,7 @@ public class Board extends JPanel {
                     }
 
                     soko.move(0, -SPACE);
+                    music.playSoundEffect("resources/adım.wav");
 
                     break;
 
@@ -369,6 +365,7 @@ public class Board extends JPanel {
                     }
 
                     soko.move(0, SPACE);
+                    music.playSoundEffect("resources/adım.wav");
 
                     break;
 
@@ -614,7 +611,6 @@ public class Board extends JPanel {
     }
 
     public void isCompleted() {
-
         int nOfBags = baggs.size();
         int finishedBags = 0;
 
@@ -622,6 +618,12 @@ public class Board extends JPanel {
             for (Area area : areas) {
                 if (bag.x() == area.x() && bag.y() == area.y()) {
                     finishedBags++;
+                    if (!bag.isOnTarget()) {
+                        music.playSoundEffect("resources/success.wav");
+                        bag.setOnTarget(true);
+                    }
+                } else {
+                    bag.setOnTarget(false);
                 }
             }
         }
@@ -632,7 +634,9 @@ public class Board extends JPanel {
         }
     }
 
+
     private void showCompletionScreen() {
+        music.playSoundEffect("resources/tada-fanfare-a-6313.wav");
         ImageIcon icon = new ImageIcon("src/resources/Level 1.png");
         Image scaledImage = icon.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH);
         ImageIcon scaledIcon = new ImageIcon(scaledImage);
@@ -651,7 +655,7 @@ public class Board extends JPanel {
         panel.add(Box.createVerticalStrut(20));
         panel.add(messageLabel);
 
-        Object[] options = {"Bir Sonraki Seviye", "Ana Menüye Dön"};
+        Object[] options = {"Bir Sonraki Seviye"};
 
         int option = JOptionPane.showOptionDialog(
                 this,
@@ -666,8 +670,6 @@ public class Board extends JPanel {
 
         if (option == JOptionPane.YES_OPTION) {
             loadNextLevel();
-        } else {
-            goBackToStartPage();
         }
     }
 

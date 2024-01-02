@@ -76,12 +76,12 @@ public class Levels extends JPanel {
         styleButton(button);
         button.addActionListener(e -> loadLevel(level));
 
-        // MouseListener ile görsel efektleri uygula
         button.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
                 button.setFont(new Font("Arial", Font.BOLD, 18)); // Font stilini kalın yap
-                buttonHoverSound.playMusic("resources/click-button.wav");  // Ses efektini çal
+                music.setVolume(-40.0f); // Arka plan müziğinin sesini düşür
+                music.playSoundEffect("resources/click-button.wav");
             }
 
             @Override

@@ -25,7 +25,7 @@ public class StartPage extends JPanel {
 
     public StartPage(JFrame frame) {
         music = new Music();
-        music.playMusic("resources/startpage.wav");
+        music.playBackgroundMusic("resources/startpage.wav");
 
         buttonHoverSound = new Music();
 
@@ -89,8 +89,7 @@ public class StartPage extends JPanel {
         myButton.addMouseListener(new MouseAdapter() {
             public void mouseEntered(MouseEvent evt) {
                 music.setVolume(-40.0f); // Arka plan müziğinin sesini düşür
-
-                buttonHoverSound.playMusic("resources/click-button.wav");  // Ses efektini çal
+                music.playSoundEffect("resources/click-button.wav");
 
                 myButton.setFont(enlargedFont);
                 int newX = myButton.getX() - (buttonGrowWidth - buttonOriginalWidth) / 2;

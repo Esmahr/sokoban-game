@@ -11,16 +11,26 @@ public class Music {
     private Clip clip;
 
     private FloatControl gainControl;
+    public void playBackgroundMusic(String filePath) {
+        playMusic(filePath, true); // Arka plan müziği için sürekli döngü
+    }
 
-    public void playMusic(String filePath) {
+    public void playSoundEffect(String filePath) {
+        playMusic(filePath, false); // Ses efekti için tek seferlik oynatma
+    }
+
+    private void playMusic(String filePath, boolean loop) {
         try {
-            ClassLoader classLoader = Sokoban.class.getClassLoader();
-
+            ClassLoader classLoader = getClass().getClassLoader();
             URL resource = classLoader.getResource(filePath);
-
             AudioInputStream audioIn = AudioSystem.getAudioInputStream(resource);
-            Clip clip = AudioSystem.getClip();
+
+            clip = AudioSystem.getClip();
             clip.open(audioIn);
+
+            if (loop) {
+                clip.loop(Clip.LOOP_CONTINUOUSLY); // Sürekli tekrar için
+            }
             clip.start();
         } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
             e.printStackTrace();

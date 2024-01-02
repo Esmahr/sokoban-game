@@ -10,6 +10,17 @@ public class Baggage extends Actor {
         
         initBaggage();
     }
+
+    private boolean onTarget = false;
+
+    public boolean isOnTarget() {
+        return onTarget;
+    }
+
+    public void setOnTarget(boolean onTarget) {
+        this.onTarget = onTarget;
+    }
+
     
     private void initBaggage() {
         
