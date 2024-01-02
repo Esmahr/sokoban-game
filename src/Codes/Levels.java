@@ -16,9 +16,15 @@ public class Levels extends JPanel {
     private static final Color BUTTON_COLOR = new Color(245, 6, 254);
     private static final Color SHADOW_COLOR = new Color(199, 47, 248);
     private static final int BUTTON_ROUNDNESS = 30;
+    private Music music;
+    private Music buttonHoverSound;
 
     public Levels(JFrame frame) {
         this.frame = frame;
+        music = new Music(); // Music nesnesini oluştur
+        //music.playMusic("resources/pure-159612.wav"); // Farklı müzik dosyası yolu
+        buttonHoverSound = new Music();
+
         try {
             backgroundImage = new ImageIcon("src/resources/background.png").getImage();
         } catch (Exception e) {
@@ -74,8 +80,8 @@ public class Levels extends JPanel {
         button.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
-                button.setForeground(Color.YELLOW); // Font rengini değiştir
-                button.setFont(new Font("Arial", Font.BOLD, 16)); // Font stilini kalın yap
+                button.setFont(new Font("Arial", Font.BOLD, 18)); // Font stilini kalın yap
+                buttonHoverSound.playMusic("resources/click-button.wav");  // Ses efektini çal
             }
 
             @Override

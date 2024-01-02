@@ -20,8 +20,15 @@ public class StartPage extends JPanel {
     private final Font originalFont = new Font("SansSerif", Font.BOLD, 15); // Orijinal font boyutu
     private final Font enlargedFont = new Font("SansSerif", Font.BOLD, 17); // Büyütülmüş font boyutu
     private JFrame frame;
+    private Music music;
+    private Music buttonHoverSound;
 
     public StartPage(JFrame frame) {
+        music = new Music();
+        music.playMusic("resources/startpage.wav");
+
+        buttonHoverSound = new Music();
+
         this.frame = frame;
         try {
             backgroundImage = new ImageIcon("src/resources/welcome1.png").getImage();
@@ -55,6 +62,7 @@ public class StartPage extends JPanel {
                 myButton.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
+                        music.stopMusic();
                         openLevelsPage();
                     }
                 });
@@ -80,6 +88,10 @@ public class StartPage extends JPanel {
 
         myButton.addMouseListener(new MouseAdapter() {
             public void mouseEntered(MouseEvent evt) {
+                music.setVolume(-40.0f); // Arka plan müziğinin sesini düşür
+
+                buttonHoverSound.playMusic("resources/click-button.wav");  // Ses efektini çal
+
                 myButton.setFont(enlargedFont);
                 int newX = myButton.getX() - (buttonGrowWidth - buttonOriginalWidth) / 2;
                 int newY = myButton.getY() - (buttonGrowHeight - buttonOriginalHeight) / 2;
@@ -97,12 +109,12 @@ public class StartPage extends JPanel {
     }
 
     private void openLevelsPage() {
-        // Levels sayfasını açacak kodlar burada.
-        Levels levelsPanel = new Levels(frame); // Levels sınıfından bir örnek oluşturun
-        frame.setContentPane(levelsPanel); // Ana frame'in içeriğini Levels paneli ile değiştirin
-        frame.revalidate(); // Frame içeriğindeki değişiklikleri uygula
-        frame.repaint();  // Frame'i yeniden çiz
+        Levels levelsPanel = new Levels(frame);
+        frame.setContentPane(levelsPanel);
+        frame.revalidate();
+        frame.repaint();
     }
+
 
     static class LevelsPage extends JPanel {
         public LevelsPage() {

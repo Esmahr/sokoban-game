@@ -6,6 +6,8 @@ import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import javax.swing.*;
 
+import javax.swing.border.EmptyBorder;
+
 public class Board extends JPanel {
 
     private final int OFFSET = 30;
@@ -22,7 +24,6 @@ public class Board extends JPanel {
     private ArrayList<Area> areas;
 
     private Player soko;
-    private Player soko1;
 
     private int w = 0;
     private int h = 0;
@@ -39,19 +40,19 @@ public class Board extends JPanel {
     private String level
             = "###################################\n"
             + "######                      #######\n"
-            + "######     #############    #######\n"
-            + "#####  $              $          ##\n"
+            + "######     #### ######## $  #######\n"
+            + "#####       $   #                ##\n"
+            + "###        ####### ###           ##\n"
+            + "###            #   #             ##\n"
+            + "###        ####    ####          ##\n"
+            + "###     ####   $      ####       ##\n"
             + "###                              ##\n"
-            + "###        $       #             ##\n"
-            + "###        ####                  ##\n"
-            + "###     ##      $       $        ##\n"
-            + "###                              ##\n"
-            + "###                              ##\n"
-            + "###         ###     ####         ##\n"
-            + "###                              ##\n"
-            + "###                              ##\n"
+            + "###       #            #         ##\n"
+            + "###       #####     ####         ##\n"
+            + "###   $                 $        ##\n"
+            + "###                     $        ##\n"
             + "###     #######      #####       ##\n"
-            + "###     $     *                ..##\n"
+            + "###     $                      ..##\n"
             + "###                            ..##\n"
             + "#########@#####################..##\n"
             + "###################################\n";
@@ -64,10 +65,10 @@ public class Board extends JPanel {
             + "#####   $   ####  $            ####\n"
             + "###    ###########   ###     ######\n"
             + "###                    #### #######\n"
-            + "######     *               $ ######\n"
+            + "######                     $ ######\n"
             + "########                     ######\n"
             + "###         #     #          ..####\n"
-            + "###    $###3       $          ..####\n"
+            + "###    $###       $          ..####\n"
             + "###         ######  ####@### ..####\n"
             + "###################################\n"
             + "###################################\n";
@@ -80,7 +81,7 @@ public class Board extends JPanel {
             + "###  $  # ###    #####\n"
             + "#####      #  ## #####\n"
             + "##         #     # ..#\n"
-            + "##    $       *    ..#\n"
+            + "##    $            ..#\n"
             + "###$#### @###      ..#\n"
             + "###      #############\n"
             + "######################\n";
@@ -88,7 +89,7 @@ public class Board extends JPanel {
     private String level3
             = "########################\n"
             + "####################  ##\n"
-            + "##       #   *       $##\n"
+            + "##       #           $##\n"
             + "## $    $#      ##### ##\n"
             + "###  #   #    $   ### ##\n"
             + "### ###  #  ######### ##\n"
@@ -108,7 +109,7 @@ public class Board extends JPanel {
             + "  ##   #   ###$     $      ###   #\n"
             + " ##    $    ##   ######      #   #\n"
             + "##  ## # ## ######  ..# $    #   #\n"
-            + "#   #  #  #   #*##  ..#  ### # ###\n"
+            + "#   #  #  #   ####  ..#  ### # ###\n"
             + "#                   ..#  #   #   #\n"
             + "# $ ### ###         ..#  $   #   #\n"
             + "##  # # # #   #@##  ..#      #   #\n"
@@ -141,15 +142,21 @@ public class Board extends JPanel {
         initBoard();
     }
     private void loadImage() {
-        ImageIcon ii = new ImageIcon("src/resources/background.png"); // Resmin yolu
+        ImageIcon ii = new ImageIcon("src/resources/background.png");
         backgroundImage = ii.getImage();
     }
-
 
     private void goBackToStartPage() {
         JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
         topFrame.getContentPane().removeAll();
         topFrame.add(new StartPage(topFrame));
+        topFrame.validate();
+        topFrame.repaint();
+    }
+    private void goBackToLevels() {
+        JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
+        topFrame.getContentPane().removeAll();
+        topFrame.add(new Levels(topFrame));
         topFrame.validate();
         topFrame.repaint();
     }
@@ -159,20 +166,28 @@ public class Board extends JPanel {
         setFocusable(true);
         initWorld();
         loadImage();
-        ImageIcon backButtonIcon = new ImageIcon("src/resources/previous.png");
+        ImageIcon backButtonIcon = new ImageIcon("src/resources/1.png");
         JButton backButton = new JButton(backButtonIcon);
-
-        // Buton özelliklerini ayarla
+        setLayout(null);
         backButton.setBorderPainted(false); // Kenarlık çizimini kapat
         backButton.setContentAreaFilled(false); // İçerik alanı arka planını kapat
         backButton.setFocusPainted(false); // Focus çizimini kapat
         backButton.setOpaque(false); // Şeffaflığı etkinleştir
+        backButton.setBounds(180, 50, 85, 55); // x, y, genişlik ve yükseklik değerlerini ayarlayın
+        backButton.addActionListener(e -> goBackToLevels());
 
-        // Eylem dinleyicisi ekle
-        backButton.addActionListener(e -> goBackToStartPage());
-
-        // Butonu panele ekle
         add(backButton);
+
+        // Ana Sayfa Butonu
+        ImageIcon homeButtonIcon = new ImageIcon("src/resources/2.png"); // Ana Sayfa ikonunun yolu
+        JButton homeButton = new JButton(homeButtonIcon);
+        homeButton.setBorderPainted(false);
+        homeButton.setContentAreaFilled(false);
+        homeButton.setFocusPainted(false);
+        homeButton.setOpaque(false);
+        homeButton.setBounds(1280, 50, 85, 55); // Ana Sayfa Butonunun konumu ve boyutu
+        homeButton.addActionListener(e -> goBackToStartPage()); // Ana sayfaya dönme işlemi
+        add(homeButton);
     }
 
     public void startGame() {
@@ -244,11 +259,6 @@ public class Board extends JPanel {
                     x += SPACE;
                     break;
 
-                case '*':
-                    soko1 = new Player(x, y);
-                    x += SPACE;
-                    break;
-
                 case ' ':
                     x += SPACE;
                     break;
@@ -269,7 +279,6 @@ public class Board extends JPanel {
         world.addAll(areas);
         world.addAll(baggs);
         world.add(soko);
-        world.add(soko1);
 
         for (int i = 0; i < world.size(); i++) {
 
@@ -282,13 +291,6 @@ public class Board extends JPanel {
 
                 g.drawImage(item.getImage(), item.x(), item.y(), this);
             }
-
-            if (isCompleted) {
-
-                g.setColor(new Color(0, 0, 0));
-                g.drawString("Completed", 25, 20);
-            }
-
         }
     }
 
@@ -328,21 +330,6 @@ public class Board extends JPanel {
 
                     break;
 
-                case KeyEvent.VK_A:
-
-                    if (checkWallCollision(soko1,
-                            LEFT_COLLISION) || checkPlayerCollision(soko1, LEFT_COLLISION)) {
-                        return;
-                    }
-
-                    if (checkBagCollision(LEFT_COLLISION)) {
-                        return;
-                    }
-
-                    soko1.move(-SPACE, 0);
-
-                    break;
-
                 case KeyEvent.VK_RIGHT:
 
                     if (checkWallCollision(soko, RIGHT_COLLISION) || checkPlayerCollision(soko, RIGHT_COLLISION)) {
@@ -354,20 +341,6 @@ public class Board extends JPanel {
                     }
 
                     soko.move(SPACE, 0);
-
-                    break;
-
-                case KeyEvent.VK_D:
-
-                    if (checkWallCollision(soko1, RIGHT_COLLISION) || checkPlayerCollision(soko1, RIGHT_COLLISION)) {
-                        return;
-                    }
-
-                    if (checkBagCollision(RIGHT_COLLISION)) {
-                        return;
-                    }
-
-                    soko1.move(SPACE, 0);
 
                     break;
 
@@ -385,20 +358,6 @@ public class Board extends JPanel {
 
                     break;
 
-                case KeyEvent.VK_W:
-
-                    if (checkWallCollision(soko1, TOP_COLLISION) || checkPlayerCollision(soko1, TOP_COLLISION)) {
-                        return;
-                    }
-
-                    if (checkBagCollision(TOP_COLLISION)) {
-                        return;
-                    }
-
-                    soko1.move(0, -SPACE);
-
-                    break;
-
                 case KeyEvent.VK_DOWN:
 
                     if (checkWallCollision(soko, BOTTOM_COLLISION) || checkPlayerCollision(soko, BOTTOM_COLLISION)) {
@@ -410,19 +369,6 @@ public class Board extends JPanel {
                     }
 
                     soko.move(0, SPACE);
-
-                    break;
-                case KeyEvent.VK_S:
-
-                    if (checkWallCollision(soko1, BOTTOM_COLLISION) || checkPlayerCollision(soko, BOTTOM_COLLISION)) {
-                        return;
-                    }
-
-                    if (checkBagCollision(BOTTOM_COLLISION)) {
-                        return;
-                    }
-
-                    soko1.move(0, SPACE);
 
                     break;
 
@@ -509,22 +455,22 @@ public class Board extends JPanel {
     private boolean checkPlayerCollision(Player player, int type) {
         switch (type) {
             case LEFT_COLLISION:
-                if (player.isLeftCollision(soko1) || player.isLeftCollision(soko)) {
+                if (player.isLeftCollision(soko)) {
                     return true;
                 }
                 break;
             case RIGHT_COLLISION:
-                if (player.isRightCollision(soko1) || player.isLeftCollision(soko)) {
+                if (player.isLeftCollision(soko)) {
                     return true;
                 }
                 break;
             case TOP_COLLISION:
-                if (player.isTopCollision(soko1) || player.isLeftCollision(soko)) {
+                if (player.isLeftCollision(soko)) {
                     return true;
                 }
                 break;
             case BOTTOM_COLLISION:
-                if (player.isBottomCollision(soko1) || player.isLeftCollision(soko)) {
+                if (player.isLeftCollision(soko)) {
                     return true;
                 }
                 break;
@@ -687,22 +633,45 @@ public class Board extends JPanel {
     }
 
     private void showCompletionScreen() {
-        int option = JOptionPane.showOptionDialog(this,
-                "Tebrikler, kazandınız! Bir sonraki levele geçmek için 'Evet', ana sayfaya dönmek için 'Hayır'ı tıklayınız.",
+        ImageIcon icon = new ImageIcon("src/resources/Level 1.png");
+        Image scaledImage = icon.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH);
+        ImageIcon scaledIcon = new ImageIcon(scaledImage);
+
+        JLabel messageLabel = new JLabel("Tebrikler, seviye Tamamlandı!");
+        messageLabel.setFont(new Font("Arial", Font.BOLD, 26));
+        messageLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        messageLabel.setBorder(new EmptyBorder(0, 100, 20, 100));
+
+        JLabel iconLabel = new JLabel(scaledIcon);
+        iconLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        panel.add(iconLabel);
+        panel.add(Box.createVerticalStrut(20));
+        panel.add(messageLabel);
+
+        Object[] options = {"Bir Sonraki Seviye", "Ana Menüye Dön"};
+
+        int option = JOptionPane.showOptionDialog(
+                this,
+                panel,
                 "Seviye Tamamlandı",
                 JOptionPane.YES_NO_OPTION,
-                JOptionPane.INFORMATION_MESSAGE,
-                null, null, null);
+                JOptionPane.PLAIN_MESSAGE,
+                null,
+                options,
+                options[0]
+        );
 
         if (option == JOptionPane.YES_OPTION) {
-            loadNextLevel(); // Sonraki seviyeye geç
+            loadNextLevel();
         } else {
-            goBackToStartPage(); // Ana sayfaya dön
+            goBackToStartPage();
         }
     }
 
     private void loadNextLevel() {
-        // Mevcut seviyeyi artır
         currentLevel++;
         switch (currentLevel) {
             case 1:
@@ -727,12 +696,11 @@ public class Board extends JPanel {
             default:
                 break;
         }
-        restartLevel(); // Yeni seviyeyi başlat
+        restartLevel();
     }
 
 
     private void restartLevel() {
-
         areas.clear();
         baggs.clear();
         walls.clear();
