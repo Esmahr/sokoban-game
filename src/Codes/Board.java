@@ -10,6 +10,13 @@ import javax.swing.border.EmptyBorder;
 
 public class Board extends JPanel {
 
+    private Timer timer;
+    private int elapsedTime = 0;
+
+    private JLabel timeLabel;
+    private JLabel levelLabel;
+    private int movesCount = 0;
+    private JLabel movesLabel;
     private final int OFFSET = 30;
     private final int SPACE = 20;
     private final int LEFT_COLLISION = 1;
@@ -68,7 +75,7 @@ public class Board extends JPanel {
             + "###                    #### #######\n"
             + "######                     $ ######\n"
             + "########                    #######\n"
-            + "###         #     #         #..####\n"
+            + "###         #     #          ..####\n"
             + "###    $###       $          ..####\n"
             + "###         ######  ### @ ## ..####\n"
             + "######################## ##########\n"
@@ -144,7 +151,13 @@ public class Board extends JPanel {
                 break;
         }
         initBoard();
+        levelLabel = new JLabel("LEVEL " + levelNum);
+        levelLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        levelLabel.setForeground(Color.WHITE);
+        levelLabel.setBounds(750, 45, 120, 30); // Konumu ve boyutu ayarlayın
+        add(levelLabel);
     }
+
     private void loadImage() {
         ImageIcon ii = new ImageIcon("src/resources/background.png");
         backgroundImage = ii.getImage();
@@ -157,6 +170,7 @@ public class Board extends JPanel {
         topFrame.validate();
         topFrame.repaint();
     }
+
     private void goBackToLevels() {
         JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
         topFrame.getContentPane().removeAll();
@@ -181,6 +195,44 @@ public class Board extends JPanel {
         backButton.addActionListener(e -> goBackToLevels());
 
         add(backButton);
+        movesLabel = new JLabel("Moves: " + movesCount);
+        movesLabel.setFont(new Font("Arial", Font.BOLD, 19));
+        movesLabel.setForeground(Color.WHITE);
+        movesLabel.setBounds(1020, 160, 120, 50);
+        add(movesLabel);
+
+        timeLabel = new JLabel("Time: 00:00 sn ");
+        timeLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        timeLabel.setForeground(Color.WHITE);
+        timeLabel.setBounds(420, 170, 120, 30);
+        add(timeLabel);
+
+        timer = new Timer(1000, e -> {
+            if (!isCompleted) {
+                elapsedTime++;
+            }
+            updateTimeLabel();
+        });
+        timer.start();
+    }
+
+    private void restartTimer() {
+        elapsedTime = 0;
+        updateTimeLabel();
+        timer.restart();
+    }
+
+    private void updateTimeLabel() {
+        // timeLabel.setText("Time: " + elapsedTime);
+        int minutes = elapsedTime / 60;
+        int seconds = elapsedTime % 60;
+        String formattedTime = String.format("%02d:%02d sn", minutes, seconds);
+        timeLabel.setText("Time: " + formattedTime);
+    }
+
+    private void resetTimer() {
+        elapsedTime = 0;
+        updateTimeLabel();
     }
 
     public void startGame() {
@@ -321,7 +373,7 @@ public class Board extends JPanel {
 
                     soko.move(-SPACE, 0);
                     music.playSoundEffect("resources/adım.wav");
-
+                    movesCount++;
                     break;
 
                 case KeyEvent.VK_RIGHT:
@@ -336,7 +388,7 @@ public class Board extends JPanel {
 
                     soko.move(SPACE, 0);
                     music.playSoundEffect("resources/adım.wav");
-
+                    movesCount++;
                     break;
 
                 case KeyEvent.VK_UP:
@@ -351,7 +403,7 @@ public class Board extends JPanel {
 
                     soko.move(0, -SPACE);
                     music.playSoundEffect("resources/adım.wav");
-
+                    movesCount++;
                     break;
 
                 case KeyEvent.VK_DOWN:
@@ -366,19 +418,19 @@ public class Board extends JPanel {
 
                     soko.move(0, SPACE);
                     music.playSoundEffect("resources/adım.wav");
-
+                    movesCount++;
                     break;
 
                 case KeyEvent.VK_R:
 
                     restartLevel();
-
+                    movesCount = 0;
                     break;
 
                 default:
                     break;
             }
-
+            movesLabel.setText("Moves: " + movesCount);
             repaint();
         }
     }
@@ -630,12 +682,14 @@ public class Board extends JPanel {
 
         if (finishedBags == nOfBags) {
             isCompleted = true;
+            timer.stop();
             showCompletionScreen();
         }
     }
 
 
     private void showCompletionScreen() {
+        music.setVolume(-40.0f);
         music.playSoundEffect("resources/tada-fanfare-a-6313.wav");
         ImageIcon icon = new ImageIcon("src/resources/Level 1.png");
         Image scaledImage = icon.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH);
@@ -678,22 +732,39 @@ public class Board extends JPanel {
         switch (currentLevel) {
             case 1:
                 this.level = level;
+                levelLabel.setText("LEVEL 1");
                 break;
             case 2:
                 this.level = level1;
                 isLevel2Button = true;
+                movesCount = -1;
+                resetTimer();
+                restartTimer();
+                levelLabel.setText("LEVEL 2");
                 break;
             case 3:
                 this.level = level2;
                 isLevel3Button = true;
+                movesCount = -1;
+                resetTimer();
+                restartTimer();
+                levelLabel.setText("LEVEL 3");
                 break;
             case 4:
                 this.level = level3;
                 isLevel4Button = true;
+                movesCount = -1;
+                resetTimer();
+                restartTimer();
+                levelLabel.setText("LEVEL 4");
                 break;
             case 5:
                 this.level = level4;
                 isLevel5Button = true;
+                movesCount = -1;
+                resetTimer();
+                restartTimer();
+                levelLabel.setText("LEVEL 5");
                 break;
             default:
                 break;

@@ -27,7 +27,6 @@ public class Music {
 
             clip = AudioSystem.getClip();
             clip.open(audioIn);
-
             if (loop) {
                 clip.loop(Clip.LOOP_CONTINUOUSLY); // Sürekli tekrar için
             }
@@ -45,5 +44,9 @@ public class Music {
         if (gainControl != null) {
             gainControl.setValue(volume);
         }
+    }
+
+    public Clip getClip() {
+        return clip;
     }
 }

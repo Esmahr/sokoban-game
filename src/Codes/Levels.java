@@ -12,17 +12,13 @@ public class Levels extends JPanel {
 
     private JFrame frame;
     private Image backgroundImage;
-    private static final Dimension BUTTON_SIZE = new Dimension(100, 50);
-    private static final Color BUTTON_COLOR = new Color(245, 6, 254);
-    private static final Color SHADOW_COLOR = new Color(199, 47, 248);
-    private static final int BUTTON_ROUNDNESS = 30;
+    private static final Dimension BUTTON_SIZE = new Dimension(150, 80);
     private Music music;
     private Music buttonHoverSound;
 
     public Levels(JFrame frame) {
         this.frame = frame;
-        music = new Music(); // Music nesnesini oluştur
-        //music.playMusic("resources/pure-159612.wav"); // Farklı müzik dosyası yolu
+        music = new Music();
         buttonHoverSound = new Music();
 
         try {
@@ -63,16 +59,63 @@ public class Levels extends JPanel {
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 50, 100));
         buttonPanel.setOpaque(false);
 
-        for (int i = 1; i <= 5; i++) {
-            JButton button = createLevelButton("Level " + i, i);
-            buttonPanel.add(button);
-        }
+            if (Board.isLevel1Button == true) {
+                JButton button = createLevelButton("src/resources/levels/1.png", 1);
+                buttonPanel.add(button);
+            } else {
+                JButton button = createLevelButton("Level ",1);
+                buttonPanel.add(button);
+            }
+            if (Board.isLevel2Button == true) {
+                JButton button = createLevelButton("src/resources/levels/2.png", 2);
+                buttonPanel.add(button);
+            } else {
+                JButton button = createLevelButton("src/resources/levels/3.png", 2);
+                buttonPanel.add(button);
+            }
+            if (Board.isLevel3Button == true) {
+                JButton button = createLevelButton("src/resources/levels/4.png", 3);
+                buttonPanel.add(button);
+            } else {
+                JButton button = createLevelButton("src/resources/levels/5.png",3);
+                buttonPanel.add(button);
+            }
+            if (Board.isLevel4Button == true) {
+                JButton button = createLevelButton("src/resources/levels/6.png" , 4);
+                buttonPanel.add(button);
+            } else {
+                JButton button = createLevelButton("src/resources/levels/7.png",4);
+                buttonPanel.add(button);
+            }
+            if (Board.isLevel5Button == true) {
+                JButton button = createLevelButton("src/resources/levels/8.png" ,5);
+                buttonPanel.add(button);
+            } else {
+                JButton button = createLevelButton("src/resources/levels/9.png" ,5);
+                buttonPanel.add(button);
+            }
+
 
         add(buttonPanel, BorderLayout.CENTER);
     }
 
-    private JButton createLevelButton(String text, int level) {
-        JButton button = new JButton(text);
+    private JButton createLevelButton(String imageUrl, int level) {
+
+// Öncelikle ImageIcon oluşturun.
+        ImageIcon backButtonIcon = new ImageIcon(imageUrl);
+
+// ImageIcon'dan Image'ı elde edin.
+        Image image = backButtonIcon.getImage();
+
+// Image'ı yeniden boyutlandırın.
+        Image newimg = image.getScaledInstance(150, 175, java.awt.Image.SCALE_SMOOTH);
+
+// Yeni ImageIcon'ı oluşturun.
+        ImageIcon newIcon = new ImageIcon(newimg);
+
+// JButton oluşturun ve ona yeni icon'u ekleyin.
+        JButton button = new JButton(newIcon);
+
         styleButton(button);
         button.addActionListener(e -> loadLevel(level));
 
@@ -94,15 +137,12 @@ public class Levels extends JPanel {
         return button;
     }
 
-
     private void styleButton(JButton button) {
         button.setPreferredSize(BUTTON_SIZE);
-        button.setFont(new Font("Arial", Font.BOLD, 16));
         button.setFocusPainted(false);
         button.setBorderPainted(false);
         button.setContentAreaFilled(false);
         button.setOpaque(false);
-        button.setBackground(BUTTON_COLOR);
         button.setBorder(BorderFactory.createEmptyBorder());
         button.setUI(new StyledButtonUI());
     }
@@ -124,7 +164,7 @@ public class Levels extends JPanel {
         frame.getContentPane().removeAll();
         Board board = new Board(level);
         boolean isAllowedToPlay = false;
-        switch(level) {
+        switch (level) {
             case 1:
                 isAllowedToPlay = true; // 1. seviye her zaman oynanabilir
                 break;
@@ -162,23 +202,7 @@ public class Levels extends JPanel {
         @Override
         public void paint(Graphics g, JComponent c) {
             super.paint(g, c);
-            if (c instanceof JButton) {
-                JButton button = (JButton) c;
-                paintButtonAppearance(button, g, SHADOW_COLOR, BUTTON_COLOR);
-            }
-        }
 
-        private void paintButtonAppearance(JButton button, Graphics g, Color shadowColor, Color backgroundColor) {
-            Graphics2D g2 = (Graphics2D) g.create();
-            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-            // Draw the shadow
-            g2.setColor(shadowColor);
-            g2.fillRoundRect(0, 0, button.getWidth(), button.getHeight(), BUTTON_ROUNDNESS, BUTTON_ROUNDNESS);
-            // Draw the button background
-            g2.setColor(backgroundColor);
-            g2.fillRoundRect(0, 0, button.getWidth() - 5, button.getHeight() - 5, BUTTON_ROUNDNESS, BUTTON_ROUNDNESS);
-            super.paint(g2, button);
-            g2.dispose();
         }
     }
 }
