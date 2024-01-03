@@ -21,7 +21,6 @@ public class Baggage extends Actor {
         this.onTarget = onTarget;
     }
 
-    
     private void initBaggage() {
         
         ImageIcon iicon = new ImageIcon("src/resources/baggage.png");

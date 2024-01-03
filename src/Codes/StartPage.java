@@ -88,7 +88,7 @@ public class StartPage extends JPanel {
 
         myButton.addMouseListener(new MouseAdapter() {
             public void mouseEntered(MouseEvent evt) {
-                music.setVolume(-40.0f); // Arka plan müziğinin sesini düşür
+                music.setVolume(-40.0f);
                 music.playSoundEffect("resources/click-button.wav");
 
                 myButton.setFont(enlargedFont);
@@ -98,7 +98,7 @@ public class StartPage extends JPanel {
             }
 
             public void mouseExited(MouseEvent evt) {
-                myButton.setFont(originalFont); // Fontu orijinal boyutuna geri döndür
+                myButton.setFont(originalFont);
                 int newX = myButton.getX() + (buttonGrowWidth - buttonOriginalWidth) / 2;
                 int newY = myButton.getY() + (buttonGrowHeight - buttonOriginalHeight) / 2;
                 myButton.setBounds(newX, newY, buttonOriginalWidth, buttonOriginalHeight);
@@ -112,15 +112,6 @@ public class StartPage extends JPanel {
         frame.setContentPane(levelsPanel);
         frame.revalidate();
         frame.repaint();
-    }
-
-
-    static class LevelsPage extends JPanel {
-        public LevelsPage() {
-            // Levels sayfasının içeriğini burada oluşturun
-            setBackground(Color.BLUE); // Örnek arkaplan rengi
-            add(new JLabel("Levels Page")); // Örnek label
-        }
     }
 
     @Override
@@ -142,7 +133,6 @@ public class StartPage extends JPanel {
 
         @Override
         public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {
-            // Burada border çizgisi çizilmiyor, bu yüzden boş bırakıldı.
         }
 
         public Insets getBorderInsets(Component c) {

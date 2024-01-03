@@ -163,14 +163,6 @@ public class Board extends JPanel {
         backgroundImage = ii.getImage();
     }
 
-    private void goBackToStartPage() {
-        JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
-        topFrame.getContentPane().removeAll();
-        topFrame.add(new StartPage(topFrame));
-        topFrame.validate();
-        topFrame.repaint();
-    }
-
     private void goBackToLevels() {
         JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
         topFrame.getContentPane().removeAll();
@@ -223,7 +215,6 @@ public class Board extends JPanel {
     }
 
     private void updateTimeLabel() {
-        // timeLabel.setText("Time: " + elapsedTime);
         int minutes = elapsedTime / 60;
         int seconds = elapsedTime % 60;
         String formattedTime = String.format("%02d:%02d sn", minutes, seconds);
@@ -652,13 +643,11 @@ public class Board extends JPanel {
                         isCompleted();
                     }
                 }
-
                 break;
 
             default:
                 break;
         }
-
         return false;
     }
 
@@ -686,7 +675,6 @@ public class Board extends JPanel {
             showCompletionScreen();
         }
     }
-
 
     private void showCompletionScreen() {
         music.setVolume(-40.0f);
@@ -771,7 +759,6 @@ public class Board extends JPanel {
         }
         restartLevel();
     }
-
 
     private void restartLevel() {
         areas.clear();
