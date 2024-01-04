@@ -13,10 +13,10 @@ public class StartPage extends JPanel {
 
     private Image backgroundImage;
     private JButton myButton;
-    private final int buttonOriginalWidth = 155;
-    private final int buttonOriginalHeight = 40;
-    private final int buttonGrowWidth = 165;
-    private final int buttonGrowHeight = 45;
+    private final int buttonOriginalWidth = 165;
+    private final int buttonOriginalHeight = 45;
+    private final int buttonGrowWidth = 175;
+    private final int buttonGrowHeight = 50;
     private final Font originalFont = new Font("SansSerif", Font.BOLD, 15); // Orijinal font boyutu
     private final Font enlargedFont = new Font("SansSerif", Font.BOLD, 17); // Büyütülmüş font boyutu
     private JFrame frame;
@@ -83,7 +83,7 @@ public class StartPage extends JPanel {
         myButton.setContentAreaFilled(false);
         myButton.setFocusPainted(false);
         myButton.setPreferredSize(new Dimension(buttonOriginalWidth, buttonOriginalHeight));
-        myButton.setBounds(750, 495, buttonOriginalWidth, buttonOriginalHeight);
+        myButton.setBounds(700, 495, buttonOriginalWidth, buttonOriginalHeight);
         myButton.setFont(new Font("SansSerif", Font.BOLD, 15));
 
         myButton.addMouseListener(new MouseAdapter() {

@@ -17,7 +17,6 @@ public class Board extends JPanel {
     private JLabel levelLabel;
     private int movesCount = 0;
     private JLabel movesLabel;
-    private final int OFFSET = 30;
     private final int SPACE = 20;
     private final int LEFT_COLLISION = 1;
     private final int RIGHT_COLLISION = 2;
@@ -34,8 +33,6 @@ public class Board extends JPanel {
 
     private Player soko;
 
-    private int w = 0;
-    private int h = 0;
     private int currentLevel;
 
     private boolean isCompleted = false;
@@ -51,9 +48,9 @@ public class Board extends JPanel {
             + "######                      #######\n"
             + "######     #### ######## $  #######\n"
             + "#####       $   #                ##\n"
-            + "###        #####   ###           ##\n"
+            + "###        ######                ##\n"
             + "###                              ##\n"
-            + "###       #        ####          ##\n"
+            + "###        ####    ####          ##\n"
             + "###     #####  $     #####       ##\n"
             + "###                              ##\n"
             + "###       #####     ####         ##\n"
@@ -154,13 +151,13 @@ public class Board extends JPanel {
         levelLabel = new JLabel("LEVEL " + levelNum);
         levelLabel.setFont(new Font("Arial", Font.BOLD, 20));
         levelLabel.setForeground(Color.WHITE);
-        levelLabel.setBounds(750, 45, 120, 30); // Konumu ve boyutu ayarlayın
+        levelLabel.setBounds(720, 45, 120, 30);
         add(levelLabel);
     }
 
     private void loadImage() {
-        ImageIcon ii = new ImageIcon("src/resources/background.png");
-        backgroundImage = ii.getImage();
+        ImageIcon background = new ImageIcon("src/resources/background.png");
+        backgroundImage = background.getImage();
     }
 
     private void goBackToLevels() {
@@ -179,14 +176,14 @@ public class Board extends JPanel {
         ImageIcon backButtonIcon = new ImageIcon("src/resources/1.png");
         JButton backButton = new JButton(backButtonIcon);
         setLayout(null);
-        backButton.setBorderPainted(false); // Kenarlık çizimini kapat
-        backButton.setContentAreaFilled(false); // İçerik alanı arka planını kapat
-        backButton.setFocusPainted(false); // Focus çizimini kapat
-        backButton.setOpaque(false); // Şeffaflığı etkinleştir
-        backButton.setBounds(180, 50, 85, 55); // x, y, genişlik ve yükseklik değerlerini ayarlayın
+        backButton.setBorderPainted(false);
+        backButton.setContentAreaFilled(false);
+        backButton.setFocusPainted(false);
+        backButton.setOpaque(false);
+        backButton.setBounds(180, 50, 85, 55);
         backButton.addActionListener(e -> goBackToLevels());
-
         add(backButton);
+
         movesLabel = new JLabel("Moves: " + movesCount);
         movesLabel.setFont(new Font("Arial", Font.BOLD, 19));
         movesLabel.setForeground(Color.WHITE);
@@ -198,7 +195,6 @@ public class Board extends JPanel {
         timeLabel.setForeground(Color.WHITE);
         timeLabel.setBounds(420, 170, 120, 30);
         add(timeLabel);
-
         timer = new Timer(1000, e -> {
             if (!isCompleted) {
                 elapsedTime++;
@@ -303,8 +299,6 @@ public class Board extends JPanel {
                     break;
             }
         }
-
-        h = y;
     }
 
     private void buildWorld(Graphics g) {
@@ -334,12 +328,10 @@ public class Board extends JPanel {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         g.drawImage(backgroundImage, 0, 0, this.getWidth(), this.getHeight(), this);
-
         buildWorld(g);
     }
 
     private class TAdapter extends KeyAdapter {
-
         @Override
         public void keyPressed(KeyEvent e) {
 
@@ -354,7 +346,7 @@ public class Board extends JPanel {
                 case KeyEvent.VK_LEFT:
 
                     if (checkWallCollision(soko,
-                            LEFT_COLLISION) || checkPlayerCollision(soko, LEFT_COLLISION)) {
+                            LEFT_COLLISION)) {
                         return;
                     }
 
@@ -369,7 +361,7 @@ public class Board extends JPanel {
 
                 case KeyEvent.VK_RIGHT:
 
-                    if (checkWallCollision(soko, RIGHT_COLLISION) || checkPlayerCollision(soko, RIGHT_COLLISION)) {
+                    if (checkWallCollision(soko, RIGHT_COLLISION)) {
                         return;
                     }
 
@@ -384,7 +376,7 @@ public class Board extends JPanel {
 
                 case KeyEvent.VK_UP:
 
-                    if (checkWallCollision(soko, TOP_COLLISION) || checkPlayerCollision(soko, TOP_COLLISION)) {
+                    if (checkWallCollision(soko, TOP_COLLISION)) {
                         return;
                     }
 
@@ -399,7 +391,7 @@ public class Board extends JPanel {
 
                 case KeyEvent.VK_DOWN:
 
-                    if (checkWallCollision(soko, BOTTOM_COLLISION) || checkPlayerCollision(soko, BOTTOM_COLLISION)) {
+                    if (checkWallCollision(soko, BOTTOM_COLLISION)) {
                         return;
                     }
 
@@ -413,7 +405,6 @@ public class Board extends JPanel {
                     break;
 
                 case KeyEvent.VK_R:
-
                     restartLevel();
                     movesCount = 0;
                     break;
@@ -437,7 +428,6 @@ public class Board extends JPanel {
                     Wall wall = walls.get(i);
 
                     if (actor.isLeftCollision(wall)) {
-
                         return true;
                     }
                 }
@@ -482,37 +472,9 @@ public class Board extends JPanel {
                         return true;
                     }
                 }
-
                 return false;
 
             default:
-                break;
-        }
-
-        return false;
-    }
-
-    private boolean checkPlayerCollision(Player player, int type) {
-        switch (type) {
-            case LEFT_COLLISION:
-                if (player.isLeftCollision(soko)) {
-                    return true;
-                }
-                break;
-            case RIGHT_COLLISION:
-                if (player.isLeftCollision(soko)) {
-                    return true;
-                }
-                break;
-            case TOP_COLLISION:
-                if (player.isLeftCollision(soko)) {
-                    return true;
-                }
-                break;
-            case BOTTOM_COLLISION:
-                if (player.isLeftCollision(soko)) {
-                    return true;
-                }
                 break;
         }
         return false;
@@ -679,7 +641,7 @@ public class Board extends JPanel {
     private void showCompletionScreen() {
         music.setVolume(-40.0f);
         music.playSoundEffect("resources/tada-fanfare-a-6313.wav");
-        ImageIcon icon = new ImageIcon("src/resources/Level 1.png");
+        ImageIcon icon = new ImageIcon("src/resources/tada.png");
         Image scaledImage = icon.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH);
         ImageIcon scaledIcon = new ImageIcon(scaledImage);
 
