@@ -1,6 +1,14 @@
 # Java-Sokoban-Game
-Java Sokoban game source code
 
-https://zetcode.com/javagames/sokoban/
+### Ana Sayfa
 
-![Sokoban game screenshot](sokoban_game.png)
+![Sokoban game screenshot](src/resources/start-page.png)
+
+### Level Sayfası
+
+![Sokoban game screenshot](src/resources/level-page.png)
+
+### Oyun Ekranı
+
+![Sokoban game screenshot](src/resources/game-page.png)
+
